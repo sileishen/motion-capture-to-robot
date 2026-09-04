@@ -1,8 +1,8 @@
 # RoleMotion Pipeline
 
-RoleMotion 的项目主页，展示从 motion capture、motion processing、text-to-motion 到 simulation 与 Unitree G1 deployment 的完整链路。
+RoleMotion Pipeline 项目主页，展示从 data acquisition 到 Unitree G1 deployment 的完整工程路线。Processing 输出可进入 StableMoFusion 训练与推理，也可直接进入 GMR；生成动作还可分别进入 Evaluator 与机器人链路。
 
-在线访问：<https://sileishen.github.io/rolemotion/>
+在线访问：<https://sileishen.github.io/rolemotion-pipeline/>
 
 ## Website structure
 

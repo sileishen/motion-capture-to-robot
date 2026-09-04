@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="RoleMotion：从人体动作采集、标准化与生成，到 Unitree G1 机器人部署的完整技术链路。" />
+  <meta name="description" content="RoleMotion Pipeline：从人体动作数据采集与标准化，到动作生成、质量评价、机器人重定向、仿真训练与 Unitree G1 部署。" />
   <title>RoleMotion | Motion Intelligence Pipeline</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -21,7 +21,7 @@
       <nav class="nav-menu" aria-label="主导航">
         <a class="active" href="#home">首页 Home</a>
         <a href="#overview">概览 Overview</a>
-        <a href="#pipeline">链路 Pipeline</a>
+        <a href="#pipeline">路线 Dataflow</a>
         <a href="#modules">模块 Modules</a>
       </nav>
 
@@ -42,17 +42,17 @@
 
         <div class="hero-brief" data-reveal>
           <div>
-            <div class="eyebrow">RoleMotion · Motion Intelligence Pipeline</div>
-            <h1 id="hero-title">从人体动作<br /><span>到机器人执行</span></h1>
+            <div class="eyebrow">Data Acquisition → Robot Deployment</div>
+            <h1 id="hero-title">从数据采集<br /><span>到机器人部署</span></h1>
           </div>
           <div class="hero-brief-copy">
             <p class="hero-lead">
-              从真实人体动作采集出发，经由 <strong>UE5 Retarget</strong>、统一动作表示、
-              <strong>StableMoFusion</strong> 与 Human Preference Evaluator，最终连接
-              <strong>GMR、HoloMotion</strong> 和 <strong>Unitree G1</strong>。
+              从真实人体动作采集出发，经 <strong>UE5 Retarget</strong> 与 Processing 建立统一动作表示。
+              标准数据既可用于 <strong>StableMoFusion</strong> 训练与推理，也可直接进入
+              <strong>GMR、HoloMotion</strong> 和 <strong>Unitree G1</strong> 机器人链路。
             </p>
             <div class="hero-actions">
-              <a class="button button-primary" href="#pipeline">查看节点说明 <span aria-hidden="true">→</span></a>
+              <a class="button button-primary" href="#pipeline">查看路线分支 <span aria-hidden="true">→</span></a>
               <a class="button button-secondary" href="#modules">浏览核心模块</a>
             </div>
           </div>
@@ -74,11 +74,11 @@
         <div class="section-head" data-reveal>
           <div>
             <div class="section-kicker">Project Overview</div>
-            <h2 class="section-title" id="overview-title">四层技术架构<br /><span>One Connected System</span></h2>
+            <h2 class="section-title" id="overview-title">四层协作架构<br /><span>Shared Motion, Branching Paths</span></h2>
           </div>
           <p class="section-desc">
-            RoleMotion 不以单一模型为终点，而是围绕统一动作表示连接采集、生成、评价与机器人执行。
-            每一层都有清晰输入输出，也保留可回放、可检查和可复用的工程节点。
+            整体系统以统一动作表示为共享接口，但并非单一线性流程：Processing 后的数据可进入
+            生成模型，也可绕过生成与评价模块，直接进入机器人重定向与控制链路。
           </p>
         </div>
 
@@ -91,17 +91,17 @@
           <article class="layer-card" data-reveal>
             <span class="layer-index">L02</span>
             <h3>Motion Intelligence</h3>
-            <p>统一 20 FPS / 135D 表示，为 StableMoFusion 的训练与推理提供标准数据。</p>
+            <p>统一 20 FPS / 135D 表示，同时服务 StableMoFusion 与 GMR 两条下游路线。</p>
           </article>
           <article class="layer-card" data-reveal>
             <span class="layer-index">L03</span>
             <h3>Human-aligned Evaluation</h3>
-            <p>以 Match 与 Smooth 为核心维度，把人的动作感知纳入自动评价体系。</p>
+            <p>Evaluator 跟随 StableMoFusion，对推理结果的 Match 与 Smooth 质量进行评价。</p>
           </article>
           <article class="layer-card" data-reveal>
             <span class="layer-index">L04</span>
             <h3>Embodied Deployment</h3>
-            <p>GMR、HoloMotion、Isaac Lab 与 Unitree G1 共同完成 Sim2Real 闭环。</p>
+            <p>GMR 可接收 Processing 数据或 StableMoFusion 结果，再进入仿真训练与 G1 部署。</p>
           </article>
         </div>
       </div>
@@ -111,28 +111,50 @@
       <div class="container">
         <div class="section-head" data-reveal>
           <div>
-            <div class="section-kicker">End-to-end Pipeline</div>
-            <h2 class="section-title" id="pipeline-title">八个关键节点<br /><span>From Capture to G1</span></h2>
+            <div class="section-kicker">Motion Dataflow</div>
+            <h2 class="section-title" id="pipeline-title">八个协作节点<br /><span>From Data Acquisition to Deployment</span></h2>
           </div>
           <p class="section-desc">
-            上游负责获得并标准化人体动作；中游完成生成与偏好评价；下游将动作转换为机器人参考，
-            在仿真中训练稳定跟踪策略并部署到真机。
+            Capture、Data Check、UE5 Retarget 与 Processing 形成共享数据基础。随后路线分叉：
+            StableMoFusion 负责训练与推理，Evaluator 仅评价生成结果；GMR 则可接收标准数据或生成结果。
           </p>
         </div>
 
-        <div class="pipeline-shell" data-reveal tabindex="0" aria-label="可横向滚动查看完整 Pipeline">
-          <div class="pipeline-track">
-            <article class="pipeline-node"><span class="node-step">Step 01</span><h3>Motion Capture</h3><p>Xsens MVN Link<br />人体动作采集</p></article>
-            <article class="pipeline-node"><span class="node-step">Step 02</span><h3>Data Check</h3><p>回放、质量检查<br />数据管理</p></article>
-            <article class="pipeline-node"><span class="node-step">Step 03</span><h3>UE5 Retarget</h3><p>Xsens Skeleton<br />→ SMPL-H</p></article>
-            <article class="pipeline-node"><span class="node-step">Step 04</span><h3>Processing</h3><p>FBX → PKL → NPY<br />20 FPS · [T,135]</p></article>
-            <article class="pipeline-node"><span class="node-step">Step 05</span><h3>StableMoFusion</h3><p>Text-to-Motion<br />动作生成</p></article>
-            <article class="pipeline-node"><span class="node-step">Step 06</span><h3>Evaluator</h3><p>Human Preference<br />Match · Smooth</p></article>
-            <article class="pipeline-node"><span class="node-step">Step 07</span><h3>GMR + HoloMotion</h3><p>Robot Reference<br />PPO Tracking</p></article>
-            <article class="pipeline-node"><span class="node-step">Step 08</span><h3>Unitree G1</h3><p>Sim2Real<br />Real-world Execution</p></article>
+        <div class="pipeline-shell" data-reveal tabindex="0" aria-label="可横向滚动查看分支式 Motion Dataflow">
+          <div class="dataflow-map">
+            <svg class="dataflow-lines" viewBox="0 0 1180 480" aria-hidden="true" preserveAspectRatio="none">
+              <defs>
+                <marker id="arrow-data" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z"></path></marker>
+                <marker id="arrow-model" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z"></path></marker>
+                <marker id="arrow-eval" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z"></path></marker>
+                <marker id="arrow-robot" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z"></path></marker>
+              </defs>
+              <path class="flow-line data" d="M160 360 H180"></path>
+              <path class="flow-line data" d="M340 360 H360"></path>
+              <path class="flow-line data" d="M520 360 H540"></path>
+              <path class="flow-line model" d="M620 280 C620 190 660 135 725 135"></path>
+              <path class="flow-line evaluation" d="M885 135 H950"></path>
+              <path class="flow-line robot" d="M700 360 H760"></path>
+              <path class="flow-line robot generated" d="M805 215 C805 245 835 260 850 280"></path>
+              <path class="flow-line robot" d="M940 360 H1000"></path>
+            </svg>
+
+            <article class="pipeline-node node-capture data-node"><span class="node-step">Acquire</span><h3>Motion Capture</h3><p>Xsens MVN Link<br />人体动作采集</p></article>
+            <article class="pipeline-node node-check data-node"><span class="node-step">Inspect</span><h3>Data Check</h3><p>回放、质量检查<br />数据管理</p></article>
+            <article class="pipeline-node node-retarget data-node"><span class="node-step">Align</span><h3>UE5 Retarget</h3><p>Xsens Skeleton<br />→ SMPL-H</p></article>
+            <article class="pipeline-node node-processing hub-node"><span class="node-step">Shared Motion Hub</span><h3>Processing</h3><p>FBX → PKL → NPY<br />20 FPS · [T,135]</p></article>
+            <article class="pipeline-node node-generation model-node"><span class="node-step">Model Path</span><h3>StableMoFusion</h3><p>训练与 Text-to-Motion<br />推理生成</p></article>
+            <article class="pipeline-node node-evaluator eval-node"><span class="node-step">Quality Branch</span><h3>Evaluator</h3><p>仅评价生成结果<br />Match · Smooth</p></article>
+            <article class="pipeline-node node-gmr robot-node"><span class="node-step">Robot Path</span><h3>GMR + HoloMotion</h3><p>接收标准或生成动作<br />Retarget · PPO Tracking</p></article>
+            <article class="pipeline-node node-g1 deploy-node"><span class="node-step">Deploy</span><h3>Unitree G1</h3><p>Sim2Real<br />Real-world Execution</p></article>
+
+            <span class="flow-label label-model">标准数据 → 训练 / 推理</span>
+            <span class="flow-label label-direct">标准数据 → 直接重定向</span>
+            <span class="flow-label label-generated">生成结果 → GMR</span>
           </div>
-          <div class="pipeline-legend">
-            <span>Data Foundation</span><span>Motion Intelligence</span><span>Evaluation</span><span>Embodied Deployment</span>
+          <div class="pipeline-route-notes">
+            <div><strong>Model & Evaluation</strong><span>Processing → StableMoFusion → Evaluator</span></div>
+            <div><strong>Embodied Deployment</strong><span>Processing / StableMoFusion → GMR → Simulation → Unitree G1</span></div>
           </div>
         </div>
       </div>
@@ -146,8 +168,8 @@
             <h2 class="section-title" id="modules-title">真实工程节点<br /><span>Inspect Every Stage</span></h2>
           </div>
           <p class="section-desc">
-            真实项目素材覆盖动作采集、骨骼重定向、标准化处理、动作生成、偏好评价与机器人部署，
-            各模块通过统一动作表示和明确的数据接口连接。
+            真实项目素材覆盖动作采集、骨骼重定向、标准化处理、动作生成、偏好评价与机器人部署。
+            卡片按工程模块陈列，不代表唯一执行顺序；Processing 与 StableMoFusion 均可为 GMR 提供 motion input。
           </p>
         </div>
 
@@ -202,7 +224,7 @@
             <div class="module-body">
               <div class="module-meta"><span>04 · Motion Intelligence</span><span>Process</span></div>
               <h3>Data Processing</h3>
-              <p>PKL 作为可检查的中间表示；正式算法数据在 PKL → NPY 阶段完成标准化。</p>
+              <p>PKL 作为可检查的中间表示；标准化 NPY 可分别进入 StableMoFusion 或直接进入 GMR。</p>
               <button class="detail-button" type="button" data-module-detail="processing">Technical Details <span aria-hidden="true">→</span></button>
             </div>
           </article>
@@ -215,7 +237,7 @@
             <div class="module-body">
               <div class="module-meta"><span>05 · Motion Intelligence</span><span>Generate</span></div>
               <h3>StableMoFusion</h3>
-              <p>以自然语言文本为输入，生成与 GT 共用统一接口的人体动作序列。</p>
+              <p>以自然语言文本为输入，生成与 GT 共用统一接口的动作，可送往 Evaluator 或 GMR。</p>
               <div class="module-list"><span>Text Prompt</span><span>Batch Inference</span><span>Motion Output</span></div>
               <button class="detail-button" type="button" data-module-detail="generation">Technical Details <span aria-hidden="true">→</span></button>
             </div>
@@ -244,7 +266,7 @@
             <div class="module-body">
               <div class="module-meta"><span>07 · Embodied Deployment</span><span>Simulate</span></div>
               <h3>Robot Simulation</h3>
-              <p>GMR 生成 G1 reference，HoloMotion / Isaac Lab 构建 tracking environment，PPO 学习稳定跟踪策略。</p>
+              <p>GMR 接收 Processing 标准动作或 StableMoFusion 生成结果，生成 G1 reference 后进入 HoloMotion / Isaac Lab。</p>
               <div class="module-list"><span>GMR</span><span>HoloMotion</span><span>Isaac Lab</span><span>PPO</span><span>Domain Randomization</span></div>
               <button class="detail-button" type="button" data-module-detail="simulation">Technical Details <span aria-hidden="true">→</span></button>
             </div>
@@ -273,7 +295,7 @@
     <div class="container footer-inner">
       <div>
         <div class="footer-brand">RoleMotion</div>
-        <div class="footer-copy">Motion Capture → UE5 Retarget → Data Processing → StableMoFusion → Evaluator → Robot Deployment</div>
+        <div class="footer-copy">Capture → Processing · Processing / StableMoFusion → GMR → Simulation → Unitree G1</div>
       </div>
       <div class="footer-meta">Project Overview · 2026</div>
     </div>

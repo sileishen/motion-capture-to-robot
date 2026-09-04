@@ -53,12 +53,12 @@
     processing: {
       kicker: '04 · Motion Intelligence',
       title: '数据处理 Data Processing',
-      summary: '区分完整中间表示与正式算法表示，使格式解析、数据标准化和模型接口保持独立。',
+      summary: '建立共享标准动作接口：既可供 StableMoFusion 训练与推理，也可直接进入 GMR 机器人重定向链路。',
       sections: [
         ['Input', ['UE5 导向后的 SMPL-H FBX', 'FBX 中的骨骼旋转、root translation 与时间信息']],
         ['Core Process', ['FBX → 完整 SMPL-H PKL，中间保留 52-joint axis-angle', '坐标系重置、落地与原点归一化', '选择 22 个 body joints 并转换为 Rot6D']],
-        ['Output', ['20 FPS 标准动作序列', '[T,135] = root translation 3 + 22 joints × Rot6D']],
-        ['Engineering Focus', ['从 FBX 读取实际 source FPS', 'rotation 与 translation 同步重采样', 'PKL 作为可复用和可排查的中间检查点']]
+        ['Output', ['20 FPS 标准动作序列', '[T,135] = root translation 3 + 22 joints × Rot6D', '同一表示分别对接 StableMoFusion 与 GMR']],
+        ['Engineering Focus', ['从 FBX 读取实际 source FPS', 'rotation 与 translation 同步重采样', 'PKL 作为可复用和可排查的中间检查点', '生成路线与机器人路线共享数据约定']]
       ]
     },
     generation: {
@@ -75,7 +75,7 @@
     evaluator: {
       kicker: '06 · Human-aligned Evaluation',
       title: 'Human Preference Evaluator',
-      summary: '把人的动作感知转化为可学习的偏好信号，从语义匹配和动作自然性两个维度评价生成结果。',
+      summary: '跟随 StableMoFusion 推理输出，把人的动作感知转化为可学习的偏好信号；该评价支路不作为 GMR 的前置步骤。',
       sections: [
         ['Input', ['Text Prompt 与候选动作', '人工比较与偏好标注结果']],
         ['Core Process', ['Match：文本语义与动作完成度', 'Smooth：动作连续性与自然程度', '将偏好结果组织为 pairwise ranking supervision']],
@@ -86,9 +86,9 @@
     simulation: {
       kicker: '07 · Embodied Deployment',
       title: '机器人仿真 Robot Simulation',
-      summary: '将标准人体动作转换为 G1 reference，并通过闭环强化学习获得兼顾动作跟踪与平衡的控制策略。',
+      summary: '接收 Processing 标准动作或 StableMoFusion 生成结果，转换为 G1 reference，并通过闭环强化学习获得稳定控制策略。',
       sections: [
-        ['Input', ['RoleMotion 标准人体动作', 'SMPL-H Forward 后的人体关节姿态']],
+        ['Input', ['Processing 输出的标准人体动作', '或 StableMoFusion 输出的生成动作', 'SMPL-H Forward 后的人体关节姿态']],
         ['Core Process', ['GMR 将人体动作重定向为 Unitree G1 29-DoF reference', 'HoloMotion / Isaac Lab 构建 observation、action、reward、reset 与 termination', '使用 PPO 训练 reference motion tracking policy']],
         ['Output', ['可稳定跟踪多种参考动作的策略', '用于 Sim2Real 的策略模型与验证结果']],
         ['Engineering Focus', ['joint order、坐标轴与 root height 对齐', 'reference 频率与控制频率插值', 'tracking 精度与 balance 稳定性的权衡', 'friction、noise、offset 与 external push 随机化']]

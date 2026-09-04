@@ -733,18 +733,65 @@ img {
   content: "";
 }
 
-.pipeline-track {
+.dataflow-map {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(8, minmax(138px, 1fr));
-  gap: 12px;
+  width: 100%;
+  min-width: 1080px;
+  height: 480px;
 }
 
+.dataflow-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.flow-line {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.flow-line.data {
+  stroke: #69d5ff;
+  marker-end: url(#arrow-data);
+}
+
+.flow-line.model {
+  stroke: #79a9ff;
+  marker-end: url(#arrow-model);
+}
+
+.flow-line.evaluation {
+  stroke: #c7a7ff;
+  marker-end: url(#arrow-eval);
+}
+
+.flow-line.robot {
+  stroke: #60e0bd;
+  marker-end: url(#arrow-robot);
+}
+
+.flow-line.generated {
+  stroke-dasharray: 7 7;
+}
+
+#arrow-data path { fill: #69d5ff; }
+#arrow-model path { fill: #79a9ff; }
+#arrow-eval path { fill: #c7a7ff; }
+#arrow-robot path { fill: #60e0bd; }
+
 .pipeline-node {
-  position: relative;
-  min-height: 190px;
+  position: absolute;
+  width: 13.56%;
+  min-width: 150px;
+  min-height: 175px;
   padding: 18px 16px;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 18px;
   color: #fff;
@@ -758,19 +805,29 @@ img {
   background: rgba(255, 255, 255, 0.15);
 }
 
-.pipeline-node:not(:last-child)::after {
+.pipeline-node::before {
   position: absolute;
-  z-index: 3;
-  top: 50%;
-  right: -18px;
-  width: 24px;
-  height: 24px;
-  border: 3px solid var(--cyan);
-  border-bottom: 0;
-  border-left: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: #69d5ff;
   content: "";
-  transform: translateY(-50%) rotate(45deg) scale(0.48);
 }
+
+.pipeline-node.model-node::before { background: #79a9ff; }
+.pipeline-node.eval-node::before { background: #c7a7ff; }
+.pipeline-node.robot-node::before,
+.pipeline-node.deploy-node::before { background: #60e0bd; }
+
+.node-capture { top: 280px; left: 0; }
+.node-check { top: 280px; left: 15.25%; }
+.node-retarget { top: 280px; left: 30.5%; }
+.node-processing { top: 280px; left: 45.75%; }
+.node-generation { top: 55px; left: 61.45%; }
+.node-evaluator { top: 55px; left: 80.5%; width: 14.4%; }
+.node-gmr { top: 280px; left: 64.4%; width: 15.25%; }
+.node-g1 { top: 280px; left: 84.75%; width: 14.4%; }
 
 .node-step {
   color: #8edcff;
@@ -781,7 +838,7 @@ img {
 }
 
 .pipeline-node h3 {
-  margin: 44px 0 8px;
+  margin: 40px 0 8px;
   font-size: 1rem;
   line-height: 1.25;
 }
@@ -793,26 +850,51 @@ img {
   line-height: 1.55;
 }
 
-.pipeline-legend {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  margin-top: 22px;
-  color: rgba(231, 240, 255, 0.82);
-  font-size: 0.76rem;
-  font-weight: 700;
+.flow-label {
+  position: absolute;
+  padding: 5px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  color: rgba(239, 246, 255, 0.82);
+  background: rgba(5, 25, 59, 0.82);
+  font-size: 0.68rem;
+  font-weight: 720;
+  white-space: nowrap;
 }
 
-.pipeline-legend span::before {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 7px;
-  border-radius: 50%;
-  background: var(--cyan);
-  content: "";
+.label-model { top: 232px; left: 55.4%; }
+.label-direct { top: 329px; left: 57.2%; }
+.label-generated { top: 238px; left: 68.6%; }
+
+.pipeline-route-notes {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.pipeline-route-notes div {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.pipeline-route-notes strong {
+  color: #fff;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pipeline-route-notes span {
+  color: rgba(224, 235, 251, 0.78);
+  font-size: 0.74rem;
+  line-height: 1.5;
 }
 
 .module-grid {
@@ -1361,7 +1443,7 @@ img {
     overflow-x: auto;
   }
 
-  .pipeline-track {
+  .dataflow-map {
     width: 1180px;
   }
 }
